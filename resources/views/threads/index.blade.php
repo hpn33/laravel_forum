@@ -15,8 +15,9 @@
                                     {{ $thread->title }}
                                 </a>
                             </h4>
-                            <div class="body">{{ $thread-body }}</div>
+                            <div class='body'>{{ $thread->body }}</div>
                         </article>
+			<hr>
                     @endforeach
                 </div>
             </div>
