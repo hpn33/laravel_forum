@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class ThreadsTest extends TestCase
+class ReadThreadsTest extends TestCase
 {
 
     use DatabaseMigrations;
@@ -38,7 +38,7 @@ class ThreadsTest extends TestCase
         $reply = factory('App\Reply')
             ->create(['thread_id' => $this->thread->id]);
 
-        $this->get('/threads' . $this->thread->id)
+        $this->get('/threads/' . $this->thread->id)
             ->assertSee($reply->body);
     }
 }
