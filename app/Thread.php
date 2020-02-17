@@ -11,10 +11,17 @@ class Thread extends Model
     protected $guarded = [];
 
 
-    public function path()
+    public function path(String $extention = '')
     {
-    
-        return '/threads/' . $this->id;
+        
+        $path = '/threads/' . $this->id; 
+        
+        if ($extention != '')
+        {
+            $path .= '/' . $extention;
+        }
+
+        return $path;
     
     }
 
