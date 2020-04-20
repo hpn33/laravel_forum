@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -18,7 +19,7 @@ class ThreadTest extends TestCase
     {
         parent::setUp();
 
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = create(Thread::class);
     }
 
 
@@ -36,7 +37,7 @@ class ThreadTest extends TestCase
     {
 
         $this->assertInstanceOf('App\User', $this->thread->creator);
-    
+
     }
 
 
@@ -50,7 +51,7 @@ class ThreadTest extends TestCase
         ]);
 
         $this->assertCount(1, $this->thread->replies);
-    
+
     }
 
 }
