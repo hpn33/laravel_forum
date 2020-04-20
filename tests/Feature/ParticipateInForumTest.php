@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Reply;
 use App\Thread;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -41,5 +42,19 @@ class ParticipateInForum extends TestCase
 
     }
 
+
+    /** @test */
+    function a_reply_requires_a_body()
+    {
+
+        $this->signIn();
+
+        $thread = create(Thread::class);
+        $reply = make(Reply::class, ['body' => null]);
+
+        $this->post($thread->path('replies'), $reply->toArray())
+            ->assertSessionHasErrors('body');
+
+    }
 
 }
