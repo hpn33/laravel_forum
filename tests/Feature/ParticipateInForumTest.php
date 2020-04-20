@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Thread;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -16,7 +17,8 @@ class ParticipateInForum extends TestCase
     public function unauthenticated_users_may_not_add_replies()
     {
 
-        $this->post('/threads/1/replies', [])
+        $thread = create(Thread::class);
+        $this->post($thread->path('replies'))
             ->assertRedirect('/login');
 
     }
@@ -26,8 +28,8 @@ class ParticipateInForum extends TestCase
     public function an_authenticated_user_may_participate_in_forum_threads()
     {
 
-        $user = create('App\User');
-        $this->be($user);
+        $this->withoutExceptionHandling();
+        $this->signIn();
 
         $thread = create('App\Thread');
 
