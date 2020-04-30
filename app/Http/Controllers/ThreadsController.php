@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Channel;
+use App\Filters\ThreadFilters;
 use App\Thread;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -27,33 +28,13 @@ class ThreadsController extends Controller
      * Display a listing of the resource.
      *
      * @param Channel $channel
+     * @param ThreadFilters $filters
      * @return Factory|View
      */
-    public function index(Channel $channel)
+    public function index(Channel $channel, ThreadFilters $filters)
     {
 
-        if ($channel->exists) {
-
-            $threads = $channel->threads()->latest();
-
-        } else {
-
-            $threads = Thread::latest();
-
-        }
-
-
-        if ($username = request('by'))
-        {
-
-            $user = \App\User::where('name', $username)->firstOrFail();
-
-            $threads->where('user_id', $user->id);
-
-        }
-
-        $threads = $threads->get();
-
+        $threads = $this->getThreads($channel, $filters);
 
         return view('threads.index', compact('threads'));
     }
@@ -109,37 +90,18 @@ class ThreadsController extends Controller
         return view('threads.show', compact('thread'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Thread $thread
-     * @return void
-     */
-    public function edit(Thread $thread)
+
+    protected function getThreads(Channel $channel, ThreadFilters $filters)
     {
-        //
+
+        $threads = Thread::latest()->filter($filters);
+
+        if ($channel->exists) {
+            $threads->where('channel_id', $channel->id);
+        }
+
+        return $threads->get();
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Thread $thread
-     * @return void
-     */
-    public function update(Request $request, Thread $thread)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Thread $thread
-     * @return void
-     */
-    public function destroy(Thread $thread)
-    {
-        //
-    }
 }

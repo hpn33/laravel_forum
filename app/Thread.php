@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Filters\ThreadFilters;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -11,14 +13,13 @@ class Thread extends Model
     protected $guarded = [];
 
 
-    public function path(String $extention = '')
+    public function path($extension = '')
     {
 
         $path = "/threads/{$this->channel->slug}/{$this->id}";
 
-        if ($extention != '')
-        {
-            $path .= '/' . $extention;
+        if ($extension != '') {
+            $path .= '/' . $extension;
         }
 
         return $path;
@@ -53,6 +54,21 @@ class Thread extends Model
     {
 
         $this->replies()->create($reply);
+
+    }
+
+
+    /**
+     * Apply all relevant thread filters.
+     *
+     * @param Builder $query
+     * @param ThreadFilters $filters
+     * @return Builder
+     */
+    public function scopeFilter($query, ThreadFilters $filters)
+    {
+
+        return $filters->apply($query);
 
     }
 
