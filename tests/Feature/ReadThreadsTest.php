@@ -13,10 +13,15 @@ class ReadThreadsTest extends TestCase
     use DatabaseMigrations;
 
 
+    protected $thread;
+
+
     public function setUp(): void
     {
 
         parent::setUp();
+
+        $thread = create(Thread::class);
 
     }
 
@@ -25,10 +30,10 @@ class ReadThreadsTest extends TestCase
     public function a_user_can_view_all_threads()
     {
 
-        $thread = create('App\Thread');
+        // $thread = create('App\Thread');
 
         $this->get('/threads')
-            ->assertSee($thread->title);
+            ->assertSee($this->thread->title);
 
     }
 
@@ -37,10 +42,10 @@ class ReadThreadsTest extends TestCase
     public function a_user_can_read_a_single_thread()
     {
 
-        $thread = create('App\Thread');
+        // $thread = create('App\Thread');
 
-        $this->get($thread->path())
-            ->assertSee($thread->title);
+        $this->get($this->thread->path())
+            ->assertSee($this->thread->title);
 
     }
 
@@ -90,5 +95,21 @@ class ReadThreadsTest extends TestCase
 
     }
 
+
+     /** @test */
+    function a_user_can_filter_threads_by_popularity()
+    {
+        $threadWithTwoReplies = create('App\Thread');
+        create('App\Reply', ['thread_id' => $threadWithTwoReplies->id], 2);
+
+        $threadWithThreeReplies = create('App\Thread');
+        create('App\Reply', ['thread_id' => $threadWithThreeReplies->id], 3);
+
+        $threadWithNoReplies = $this->thread;
+
+        $response = $this->getJson('threads?popular=1')->json();
+
+        $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
+    }
 
 }
