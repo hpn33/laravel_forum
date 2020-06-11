@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    
+
 
     protected $guarded = [];
 
@@ -14,6 +14,29 @@ class Reply extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+
+    function favorites()
+    {
+
+        return $this->morphMany(Favorite::class, 'favorited');
+
+    }
+
+
+    function favorite()
+    {
+
+        $attributes = ['user_id' => auth()->id()];
+
+        
+        if (! $this->favorties()->where($attributes)->exists()) {
+
+            return $this->favorites()->create($attributes);
+        
+        }
+
     }
 
 }

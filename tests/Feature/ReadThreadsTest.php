@@ -21,7 +21,7 @@ class ReadThreadsTest extends TestCase
 
         parent::setUp();
 
-        $thread = create(Thread::class);
+        $this->thread = create(Thread::class);
 
     }
 
