@@ -30,11 +30,10 @@ class Reply extends Model
 
         $attributes = ['user_id' => auth()->id()];
 
-        
-        if (! $this->favorties()->where($attributes)->exists()) {
+        if (! $this->favorites()->where($attributes)->exists()) {
 
             return $this->favorites()->create($attributes);
-        
+
         }
 
     }
