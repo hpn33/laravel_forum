@@ -8,7 +8,7 @@
                     <div class="card-header">
                         {{ $thread->title }}
                         <br>
-                        by <a href="#">{{ $thread->creator->name }}</a>
+                        by <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
                     </div>
 
                     <div class="card-body">
