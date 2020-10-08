@@ -77,6 +77,20 @@ class CreateThreadsTest extends TestCase
     }
 
 
+    /** @test */
+    function a_thread_can_be_deleted()
+    {
+
+        $this->signIn();
+
+        $thread = create('App\Thread');
+
+        $this->json('DELETE', $thread->path());
+
+        $this->assertDatabaseMissing('threads', $thread->toArray());
+
+    }
+
     public function publishThread($overrides = [])
     {
 
